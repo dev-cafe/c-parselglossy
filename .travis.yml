@@ -1,0 +1,40 @@
+language: cpp
+
+sudo: false
+
+dist: xenial
+
+python:
+  - 3.6
+
+cache:
+  timeout: 1000
+  pip: true
+  directories:
+    - $HOME/Library/Caches/Homebrew
+
+matrix:
+  fast_finish: true
+  include:
+    - os: linux
+      addons:
+        apt:
+          packages:
+            - cmake
+            - g++
+            - gcc
+    - os: osx
+
+install:
+  - ./.scripts/travis/install.sh
+  - pipenv install --three
+  - pipenv run python --version
+
+before_script:
+  - test -n $CC && unset CC && export CC=gcc;
+  - test -n $CXX && unset CXX && export CXX=g++;
+
+script:
+  - cmake -H. -Bbuild
+  - cmake --build build -- VERBOSE=1
+  # Testing
