@@ -1,4 +1,4 @@
-language: cpp
+language: c
 
 sudo: false
 
@@ -21,7 +21,6 @@ matrix:
         apt:
           packages:
             - cmake
-            - g++
             - gcc
     - os: osx
 
@@ -32,7 +31,6 @@ install:
 
 before_script:
   - test -n $CC && unset CC && export CC=gcc;
-  - test -n $CXX && unset CXX && export CXX=g++;
 
 script:
   - cmake -H. -Bbuild

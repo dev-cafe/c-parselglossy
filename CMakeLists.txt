@@ -1,0 +1,35 @@
+cmake_minimum_required(VERSION 3.5 FATAL_ERROR)
+
+project(c-parselglossy LANGUAGES C)
+
+set(CMAKE_C_STANDARD 99)
+set(CMAKE_C_EXTENSIONS OFF)
+set(CMAKE_C_STANDARD_REQUIRED ON)
+
+set_property(DIRECTORY PROPERTY EP_BASE ${CMAKE_BINARY_DIR}/subprojects)
+
+set(STAGED_INSTALL_PREFIX ${CMAKE_BINARY_DIR}/stage)
+message(STATUS "${PROJECT_NAME} staged install: ${STAGED_INSTALL_PREFIX}")
+
+add_subdirectory(external/upstream)
+
+include(ExternalProject)
+
+ExternalProject_Add(${PROJECT_NAME}_core
+  DEPENDS
+    jansson_external
+  SOURCE_DIR
+    ${CMAKE_CURRENT_LIST_DIR}/src
+  CMAKE_ARGS
+    -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER}
+    -DCMAKE_C_STANDARD=${CMAKE_C_STANDARD}
+    -DCMAKE_C_EXTENSIONS=${CMAKE_C_EXTENSIONS}
+    -DCMAKE_C_STANDARD_REQUIRED=${CMAKE_C_STANDARD_REQUIRED}
+    -Djansson_DIR=${jansson_DIR}
+  CMAKE_CACHE_ARGS
+    -DCMAKE_C_FLAGS:STRING=${CMAKE_C_FLAGS}
+  BUILD_ALWAYS
+    1
+  INSTALL_COMMAND
+    ""
+  )
